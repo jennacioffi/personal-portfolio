@@ -1,0 +1,10 @@
+{
+  "name": "Jenna Cioffi",
+  "title": "Full Stack Developer",
+  "bio": "Software Engineer | Problem Solver & Adaptable Developer • Full-Stack Capable | React • TypeScript • Vite • MUI • UI Architecture & Design Systems",
+  "profileImage": "/images/profile_pic.jpeg",
+  "socials": {
+    "github": "https://github.com/jennacioffi",
+    "linkedin": "https://www.linkedin.com/in/jenna-cioffi/"
+  }
+}
