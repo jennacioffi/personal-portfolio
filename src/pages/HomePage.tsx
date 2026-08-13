@@ -1,7 +1,6 @@
 import { Box, Paper, Typography, Button, Stack } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import { profile } from '@data';
 
 function HomePage() {
@@ -37,8 +36,8 @@ function HomePage() {
           src={profileImage}
           alt={name}
           style={{
-            maxHeight: 300,
-            maxWidth: 300,
+            maxHeight: 350,
+            maxWidth: 350,
           }}
         />
       </Box>
@@ -133,33 +132,6 @@ function HomePage() {
             LINKEDIN
           </Button>
         </Stack>
-      </Box>
-
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          mt: 4,
-          mb: 2,
-          textAlign: 'center',
-          gap: 1,
-        }}
-      >
-        <ConstructionIcon
-          sx={{ fontSize: 40, color: (theme) => theme.palette.warning.main }}
-        />
-        <Typography variant="h4" component="h3" sx={{ fontWeight: 700 }}>
-          UNDER CONSTRUCTION
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: (theme) => theme.palette.text.secondary }}
-        >
-          This page is under construction. Come back later!
-        </Typography>
       </Box>
     </Box>
   );
