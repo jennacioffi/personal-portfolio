@@ -1,12 +1,12 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Container } from '@mui/material';
 import { TopNav } from '@components';
 import { HomePage, Portfolio } from '@pages';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <TopNav />
       <Container maxWidth="lg" sx={{ textAlign: 'center', paddingTop: 4 }}>
         <Routes>
@@ -14,7 +14,7 @@ function App() {
           <Route path="/portfolio" element={<Portfolio />} />
         </Routes>
       </Container>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
