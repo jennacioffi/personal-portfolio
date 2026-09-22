@@ -1,10 +1,11 @@
-import { ProfileInfo } from '@components';
+import { ProfileInfo, Recommendations } from '@components';
 
 function HomePage() {
   return (
     <>
       {/* Header Content */}
       <ProfileInfo />
+      <Recommendations />
     </>
   );
 }

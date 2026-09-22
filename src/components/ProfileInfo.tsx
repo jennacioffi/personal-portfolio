@@ -1,18 +1,21 @@
+import { useState } from 'react';
 import { Box, Paper, Typography, Button, Stack } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { profile } from '@data';
 import { buttonSx } from '@utils/buttons';
+import RickRoll from './RickRoll';
 
 function ProfileInfo() {
   const { name, title, bio, profileImage, socials } = profile;
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap',s
         justifyContent: 'space-evenly',
         gap: 4,
         py: 4,
@@ -33,15 +36,30 @@ function ProfileInfo() {
           flexShrink: 0,
         }}
       >
-        <img
-          src={profileImage}
-          alt={name}
-          style={{
-            maxHeight: 350,
-            maxWidth: 350,
+        <Box
+          component="button"
+          type="button"
+          onClick={() => setIsVideoOpen(true)}
+          aria-label="Open video"
+          sx={{
+            border: 0,
+            padding: 0,
+            background: 'none',
+            cursor: 'pointer',
           }}
-        />
+        >
+          <img
+            src={profileImage}
+            alt={name}
+            style={{
+              maxHeight: 350,
+              maxWidth: 350,
+            }}
+          />
+        </Box>
       </Box>
+
+      <RickRoll open={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
 
       {/* Info Section */}
       <Box
