@@ -8,7 +8,7 @@ function App() {
   return (
     <HashRouter>
       <TopNav />
-      <Container maxWidth="lg" sx={{ textAlign: 'center', paddingTop: 4 }}>
+      <Container maxWidth="xl" sx={{ textAlign: 'center', paddingTop: 4 }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
