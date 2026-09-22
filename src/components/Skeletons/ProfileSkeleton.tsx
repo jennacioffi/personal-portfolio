@@ -15,10 +15,14 @@ function ProfileSkeleton() {
         gap: 4,
         py: 4,
         px: 2,
+        textAlign: 'center',
       }}
     >
       {/* Placeholder for the profile image. */}
-      <Skeleton variant="rectangular" width={350} height={350} />
+      <Skeleton
+        variant="rectangular"
+        sx={{ width: 'min(100%, 350px)', aspectRatio: '1' }}
+      />
 
       {/* Placeholders for the name, title, bio, and social buttons. */}
       <Box
@@ -28,6 +32,8 @@ function ProfileSkeleton() {
           alignItems: 'center',
           gap: 2,
           width: 'min(100%, 450px)',
+          minWidth: 0,
+          textAlign: 'center',
         }}
       >
         <Skeleton variant="text" width="65%" height={64} />

@@ -41,9 +41,11 @@ function ProfileInfo() {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
         gap: 4,
         py: 4,
         px: 2,
+        textAlign: 'center',
       }}
     >
       {/* Profile image; clicking it opens the video dialog. */}
@@ -57,7 +59,8 @@ function ProfileInfo() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          flexShrink: 0,
+          width: 'min(100%, 350px)',
+          flexShrink: 1,
         }}
       >
         <Box
@@ -79,8 +82,9 @@ function ProfileInfo() {
             src={profile_image}
             alt={name}
             style={{
-              maxHeight: 350,
-              maxWidth: 350,
+              width: '100%',
+              height: 'auto',
+              display: 'block',
             }}
           />
         </Box>
@@ -98,6 +102,8 @@ function ProfileInfo() {
           alignItems: 'center',
           textAlign: 'center',
           gap: 2,
+          width: 'min(100%, 450px)',
+          minWidth: 0,
         }}
       >
         {/* Profile name */}
@@ -114,6 +120,7 @@ function ProfileInfo() {
             textTransform: 'uppercase',
             letterSpacing: 2,
             textAlign: 'center',
+            maxWidth: '100%',
           }}
         >
           {title}
@@ -140,6 +147,7 @@ function ProfileInfo() {
             justifyContent: 'center',
             alignSelf: 'center',
             alignItems: 'center',
+            maxWidth: '100%',
           }}
         >
           <Button

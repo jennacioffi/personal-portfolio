@@ -6,7 +6,11 @@ function TopNav() {
   return (
     <AppBar position="static" color="primary" enableColorOnDark>
       <Toolbar sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Stack direction="row" spacing={2}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ flexWrap: 'wrap', justifyContent: 'center' }}
+        >
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <Button color="inherit" startIcon={<Home />}>
               Home
