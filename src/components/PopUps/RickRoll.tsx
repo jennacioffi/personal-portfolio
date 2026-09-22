@@ -1,5 +1,6 @@
 import { Box, Dialog, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { primaryColorGlowSx } from '@utils/styles';
 
 type RickRollProps = {
   open: boolean;
@@ -8,7 +9,17 @@ type RickRollProps = {
 
 function RickRoll({ open, onClose }: RickRollProps) {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      slotProps={{
+        paper: {
+          sx: primaryColorGlowSx,
+        },
+      }}
+    >
       <IconButton
         aria-label="Close video"
         onClick={onClose}

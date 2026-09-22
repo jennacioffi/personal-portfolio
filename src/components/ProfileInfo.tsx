@@ -3,8 +3,8 @@ import { Box, Paper, Typography, Button, Stack } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { profile } from '@data';
-import { buttonSx } from '@utils/buttons';
-import RickRoll from './RickRoll';
+import { buttonSx } from '@utils/styles';
+import { RickRoll } from '@components';
 
 function ProfileInfo() {
   const { name, title, bio, profileImage, socials } = profile;
