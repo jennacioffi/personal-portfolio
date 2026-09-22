@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Box, Divider, Paper, Typography } from '@mui/material';
+import type { KeyboardEvent, MouseEvent } from 'react';
+import { Box, Divider, Paper, Tooltip, Typography } from '@mui/material';
 import { recommendations } from '@data';
 import { RecommendationDialog, type SelectedRecommendation } from '@components';
 import { primaryColorGlowSx } from '@utils/styles';
@@ -59,41 +60,92 @@ function Recommendations() {
             }}
           >
             {/* Recommendation - NAME */}
-            <Typography
-              variant="h6"
-              sx={{
-                textAlign: 'center',
-              }}
+            <Tooltip
+              title="See Contact"
+              placement="top"
+              arrow
+              disableHoverListener={!recommendation.contactURL}
+              disableFocusListener={!recommendation.contactURL}
+              disableTouchListener={!recommendation.contactURL}
             >
-              {name}
-            </Typography>
+              <Typography
+                component={recommendation.contactURL ? 'a' : 'h6'}
+                href={recommendation.contactURL || undefined}
+                target={recommendation.contactURL ? '_blank' : undefined}
+                rel={
+                  recommendation.contactURL ? 'noopener noreferrer' : undefined
+                }
+                onClick={(event: MouseEvent<HTMLElement>) =>
+                  event.stopPropagation()
+                }
+                onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
+                  event.stopPropagation()
+                }
+                variant="h6"
+                sx={{
+                  textAlign: 'center',
+                  display: 'block',
+                  color: 'inherit',
+                  textDecoration: 'none',
+                  cursor: recommendation.contactURL ? 'pointer' : 'inherit',
+                  '&:visited': {
+                    color: 'inherit',
+                  },
+                  '&:hover, &:focus': {
+                    color: 'inherit',
+                    textDecoration: 'none',
+                  },
+                }}
+              >
+                {name}
+              </Typography>
+            </Tooltip>
 
             {/* Recommendation - COMPANY AND TITLE */}
-            <Typography
-              component="a"
-              href={recommendation.CompanySocialsURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(event) => event.stopPropagation()}
-              onKeyDown={(event) => event.stopPropagation()}
-              variant="subtitle1"
-              sx={{
-                textAlign: 'center',
-                display: 'block',
-                color: 'text.secondary',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                '&:visited': {
-                  color: 'text.secondary',
-                },
-                '&:hover, &:focus': {
+            <Tooltip
+              title="See Company"
+              placement="top"
+              arrow
+              disableHoverListener={!recommendation.CompanySocialsURL}
+              disableFocusListener={!recommendation.CompanySocialsURL}
+              disableTouchListener={!recommendation.CompanySocialsURL}
+            >
+              <Typography
+                component={recommendation.CompanySocialsURL ? 'a' : 'p'}
+                href={recommendation.CompanySocialsURL || undefined}
+                target={recommendation.CompanySocialsURL ? '_blank' : undefined}
+                rel={
+                  recommendation.CompanySocialsURL
+                    ? 'noopener noreferrer'
+                    : undefined
+                }
+                onClick={(event: MouseEvent<HTMLElement>) =>
+                  event.stopPropagation()
+                }
+                onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
+                  event.stopPropagation()
+                }
+                variant="subtitle1"
+                sx={{
+                  textAlign: 'center',
+                  display: 'block',
                   color: 'text.secondary',
                   textDecoration: 'none',
-                },
-              }}
-            >
-              {recommendation.company}
-            </Typography>
+                  cursor: recommendation.CompanySocialsURL
+                    ? 'pointer'
+                    : 'inherit',
+                  '&:visited': {
+                    color: 'text.secondary',
+                  },
+                  '&:hover, &:focus': {
+                    color: 'text.secondary',
+                    textDecoration: 'none',
+                  },
+                }}
+              >
+                {recommendation.company}
+              </Typography>
+            </Tooltip>
             <Typography
               variant="subtitle2"
               color="text.secondary"
