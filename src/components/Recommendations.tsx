@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
+import { Box, Divider, Paper, Tooltip, Typography } from '@mui/material';
 import {
-  Alert,
-  Box,
-  Divider,
-  LinearProgress,
-  Paper,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { RecommendationDialog } from '@components';
+  ErrorFetching,
+  RecommendationDialog,
+  RecommendationsSkeleton,
+} from '@components';
 import type { Recommendation, SelectedRecommendation } from '@types';
 import { primaryColorGlowSx } from '@utils/styles';
 import { fetchRecommendations } from '@utils';
@@ -24,6 +20,7 @@ function Recommendations() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Fetch all recommendation rows when this section first appears.
     fetchRecommendations()
       .then((data) => setRecommendations(data))
       .catch((fetchError: Error) => setError(fetchError.message))
@@ -36,21 +33,26 @@ function Recommendations() {
       aria-labelledby="recommendations-heading"
       sx={{ px: 2, pb: 6 }}
     >
-      <Typography id="recommendations-heading" variant="h4" gutterBottom>
-        Recommendations
-      </Typography>
-
-      {isLoading && (
-        <LinearProgress
-          aria-label="Loading recommendations"
-          sx={{ width: '100%' }}
-        />
-      )}
-      {error && <Alert severity="error">Unable to load recommendations.</Alert>}
-
-      {!isLoading && !error && (
+      {isLoading ? (
+        // Show only the skeleton while recommendations are loading.
+        <RecommendationsSkeleton />
+      ) : error ? (
+        // Show only the error state when the request fails.
+        <ErrorFetching message="Unable to load recommendations." />
+      ) : (
+        // Show the loaded recommendation cards after a successful request.
         <>
-          <Divider sx={{ mb: 2 }} />
+          <Typography
+            id="recommendations-heading"
+            variant="h3"
+            gutterBottom
+            sx={{
+              textAlign: 'center',
+              mb: 4,
+            }}
+          >
+            Recommendations
+          </Typography>
 
           <Box
             sx={{
@@ -93,7 +95,7 @@ function Recommendations() {
                   },
                 }}
               >
-                {/* Recommendation - NAME */}
+                {/* Reviewer name and optional LinkedIn link */}
                 <Tooltip
                   title="See Contact"
                   placement="top"
@@ -137,7 +139,7 @@ function Recommendations() {
                   </Typography>
                 </Tooltip>
 
-                {/* Recommendation - COMPANY AND TITLE */}
+                {/* Company link and reviewer title */}
                 <Tooltip
                   title="See Company"
                   placement="top"
@@ -196,7 +198,7 @@ function Recommendations() {
 
                 <Divider sx={{ my: 1 }} />
 
-                {/* Recommendation - QUOTE */}
+                {/* Public recommendation quote */}
                 <Typography variant="body1" sx={{ textAlign: 'center' }}>
                   {recommendation.quote}
                 </Typography>
@@ -206,6 +208,7 @@ function Recommendations() {
         </>
       )}
 
+      {/* Full original recommendation shown when a card is selected. */}
       <RecommendationDialog
         selectedRecommendation={selectedRecommendation}
         onClose={() => setSelectedRecommendation(null)}

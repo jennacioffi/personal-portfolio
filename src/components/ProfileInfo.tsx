@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  Box,
-  Button,
-  LinearProgress,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import type { Profile } from '@types';
 import { fetchProfile } from '@utils';
 import { buttonSx } from '@utils/styles';
-import { RickRoll } from '@components';
+import { ErrorFetching, ProfileSkeleton, RickRoll } from '@components';
 
 function ProfileInfo() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -22,6 +14,7 @@ function ProfileInfo() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
+    // Fetch the profile row when this component first appears.
     fetchProfile()
       .then((data) => setProfile(data))
       .catch((fetchError: Error) => setError(fetchError.message))
@@ -29,16 +22,19 @@ function ProfileInfo() {
   }, []);
 
   if (isLoading) {
-    return <LinearProgress aria-label="Loading profile" />;
+    // Show the approximate profile layout while the database request is pending.
+    return <ProfileSkeleton />;
   }
 
   if (error || !profile) {
-    return <Alert severity="error">Unable to load profile.</Alert>;
+    // Show a friendly fallback if the profile cannot be loaded.
+    return <ErrorFetching message="Unable to load profile." />;
   }
 
   const { bio, name, profile_image, socials, title } = profile;
 
   return (
+    // Display the loaded profile information and interactive controls.
     <Box
       sx={{
         display: 'flex',
@@ -50,7 +46,7 @@ function ProfileInfo() {
         px: 2,
       }}
     >
-      {/* Profile Picture */}
+      {/* Profile image; clicking it opens the video dialog. */}
       <Box
         component={Paper}
         elevation={6}
@@ -92,7 +88,7 @@ function ProfileInfo() {
 
       <RickRoll open={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
 
-      {/* Info Section */}
+      {/* Text and social links loaded from the profile table. */}
       <Box
         sx={{
           display: 'flex',
@@ -104,12 +100,12 @@ function ProfileInfo() {
           gap: 2,
         }}
       >
-        {/* Name */}
+        {/* Profile name */}
         <Typography variant="h2" component="h1">
           {name}
         </Typography>
 
-        {/* Title */}
+        {/* Professional title */}
         <Typography
           variant="h5"
           component="h2"
@@ -123,7 +119,7 @@ function ProfileInfo() {
           {title}
         </Typography>
 
-        {/* Bio */}
+        {/* Short professional biography */}
         <Typography
           variant="body1"
           sx={{
@@ -135,7 +131,7 @@ function ProfileInfo() {
           {bio}
         </Typography>
 
-        {/* Socials */}
+        {/* External social profile links */}
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
