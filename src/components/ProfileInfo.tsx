@@ -1,28 +1,54 @@
-import { useState } from 'react';
-import { Box, Paper, Typography, Button, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { profile } from '@data';
+import type { Profile } from '@types';
+import { fetchProfile } from '@utils';
 import { buttonSx } from '@utils/styles';
-import { RickRoll } from '@components';
+import { ErrorFetching, ProfileSkeleton, RickRoll } from '@components';
 
 function ProfileInfo() {
-  const { name, title, bio, profileImage, socials } = profile;
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
+  useEffect(() => {
+    // Fetch the profile row when this component first appears.
+    fetchProfile()
+      .then((data) => setProfile(data))
+      .catch((fetchError: Error) => setError(fetchError.message))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) {
+    // Show the approximate profile layout while the database request is pending.
+    return <ProfileSkeleton />;
+  }
+
+  if (error || !profile) {
+    // Show a friendly fallback if the profile cannot be loaded.
+    return <ErrorFetching message="Unable to load profile." />;
+  }
+
+  const { bio, name, profile_image, socials, title } = profile;
+
   return (
+    // Display the loaded profile information and interactive controls.
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
         gap: 4,
         py: 4,
         px: 2,
+        textAlign: 'center',
       }}
     >
-      {/* Profile Picture */}
+      {/* Profile image; clicking it opens the video dialog. */}
       <Box
         component={Paper}
         elevation={6}
@@ -33,13 +59,17 @@ function ProfileInfo() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          flexShrink: 0,
+          width: 'min(100%, 350px)',
+          flexShrink: 1,
         }}
       >
         <Box
           component="button"
           type="button"
-          onClick={() => setIsVideoOpen(true)}
+          onClick={(event) => {
+            event.currentTarget.blur();
+            setIsVideoOpen(true);
+          }}
           aria-label="Open video"
           sx={{
             border: 0,
@@ -49,11 +79,12 @@ function ProfileInfo() {
           }}
         >
           <img
-            src={profileImage}
+            src={profile_image}
             alt={name}
             style={{
-              maxHeight: 350,
-              maxWidth: 350,
+              width: '100%',
+              height: 'auto',
+              display: 'block',
             }}
           />
         </Box>
@@ -61,7 +92,7 @@ function ProfileInfo() {
 
       <RickRoll open={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
 
-      {/* Info Section */}
+      {/* Text and social links loaded from the profile table. */}
       <Box
         sx={{
           display: 'flex',
@@ -71,14 +102,16 @@ function ProfileInfo() {
           alignItems: 'center',
           textAlign: 'center',
           gap: 2,
+          width: 'min(100%, 450px)',
+          minWidth: 0,
         }}
       >
-        {/* Name */}
+        {/* Profile name */}
         <Typography variant="h2" component="h1">
           {name}
         </Typography>
 
-        {/* Title */}
+        {/* Professional title */}
         <Typography
           variant="h5"
           component="h2"
@@ -87,12 +120,13 @@ function ProfileInfo() {
             textTransform: 'uppercase',
             letterSpacing: 2,
             textAlign: 'center',
+            maxWidth: '100%',
           }}
         >
           {title}
         </Typography>
 
-        {/* Bio */}
+        {/* Short professional biography */}
         <Typography
           variant="body1"
           sx={{
@@ -104,7 +138,7 @@ function ProfileInfo() {
           {bio}
         </Typography>
 
-        {/* Socials */}
+        {/* External social profile links */}
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
@@ -113,6 +147,7 @@ function ProfileInfo() {
             justifyContent: 'center',
             alignSelf: 'center',
             alignItems: 'center',
+            maxWidth: '100%',
           }}
         >
           <Button
