@@ -78,7 +78,6 @@ function Recommendations() {
             gutterBottom
             sx={{
               textAlign: 'center',
-              mb: 4,
             }}
           >
             Recommendations
