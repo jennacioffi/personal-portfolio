@@ -15,7 +15,7 @@ function ProfileInfo() {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap',s
+        flexWrap: 'wrap',
         justifyContent: 'space-evenly',
         gap: 4,
         py: 4,
