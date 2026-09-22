@@ -1,15 +1,5 @@
-import type { Recommendation } from '@components';
+import type { Recommendation, RecommendationRow } from '@types';
 import { supabase } from './supabase.ts';
-
-type RecommendationRow = {
-  name: string;
-  title: string;
-  company: string;
-  company_socials_url: string;
-  contact_url: string;
-  quote: string;
-  original_data: string[];
-};
 
 export async function fetchRecommendations() {
   const { data, error } = await supabase

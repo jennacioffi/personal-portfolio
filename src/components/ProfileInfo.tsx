@@ -1,14 +1,42 @@
-import { useState } from 'react';
-import { Box, Paper, Typography, Button, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
+import {
+  Alert,
+  Box,
+  Button,
+  LinearProgress,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { profile } from '@data';
+import type { Profile } from '@types';
+import { fetchProfile } from '@utils';
 import { buttonSx } from '@utils/styles';
 import { RickRoll } from '@components';
 
 function ProfileInfo() {
-  const { name, title, bio, profileImage, socials } = profile;
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+
+  useEffect(() => {
+    fetchProfile()
+      .then((data) => setProfile(data))
+      .catch((fetchError: Error) => setError(fetchError.message))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) {
+    return <LinearProgress aria-label="Loading profile" />;
+  }
+
+  if (error || !profile) {
+    return <Alert severity="error">Unable to load profile.</Alert>;
+  }
+
+  const { bio, name, profile_image, socials, title } = profile;
 
   return (
     <Box
@@ -39,7 +67,10 @@ function ProfileInfo() {
         <Box
           component="button"
           type="button"
-          onClick={() => setIsVideoOpen(true)}
+          onClick={(event) => {
+            event.currentTarget.blur();
+            setIsVideoOpen(true);
+          }}
           aria-label="Open video"
           sx={{
             border: 0,
@@ -49,7 +80,7 @@ function ProfileInfo() {
           }}
         >
           <img
-            src={profileImage}
+            src={profile_image}
             alt={name}
             style={{
               maxHeight: 350,
