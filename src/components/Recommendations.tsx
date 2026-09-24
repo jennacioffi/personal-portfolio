@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import {
   Box,
+  Stack,
   Divider,
   IconButton,
   Paper,
@@ -80,6 +81,7 @@ function Recommendations() {
             <Typography
               id="recommendations-heading"
               variant="h3"
+              gutterBottom
               sx={{
                 textAlign: 'center',
               }}
@@ -87,13 +89,22 @@ function Recommendations() {
               Recommendations
             </Typography>
 
-            <Box>
+            <Stack
+              spacing={1}
+              direction="row"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
               <IconButton disabled size="small">
                 <InfoIcon sx={{ color: 'text.secondary' }} />
               </IconButton>
               <Typography
                 id="recommendations-subtitle"
-                variant="caption"
+                variant="subtitle1"
+                gutterBottom
                 sx={{
                   textAlign: 'center',
                 }}
@@ -102,7 +113,7 @@ function Recommendations() {
                 can also click on the reviewer or company name to visit their
                 LinkedIn profile.
               </Typography>
-            </Box>
+            </Stack>
           </>
 
           {/* Carousel of Recommendations */}
