@@ -26,12 +26,14 @@ function CareerTimeline() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch the profile row when this component first appears.
+    // Fetch career data from the API and update the state.
     fetchCareers()
       .then((data) => setCareers(data))
       .catch((fetchError: Error) => setError(fetchError.message))
       .finally(() => setIsLoading(false));
   }, []);
+
+  // TODO: Fetch projects and combine with careers and organize the timeline
 
   if (error) {
     // Show a friendly fallback if the profile cannot be loaded.
