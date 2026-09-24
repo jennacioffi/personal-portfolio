@@ -1,1 +1,2 @@
-export { default as Timeline } from './Timeline';
+export { default as CareerTimeline } from './CareerTimeline';
+export { default as TimelineCard } from './TimelineCard';

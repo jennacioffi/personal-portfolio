@@ -1,6 +1,6 @@
 import { Stack, Typography, IconButton } from '@mui/material';
 import { Info } from '@mui/icons-material';
-import { Timeline } from '@components';
+import { CareerTimeline } from '@components';
 
 function PortfolioPage() {
   return (
@@ -26,6 +26,9 @@ function PortfolioPage() {
             size="small"
             sx={{
               p: 1,
+              '&:hover': {
+                color: 'secondary.main',
+              },
             }}
           >
             <Info />
@@ -36,7 +39,7 @@ function PortfolioPage() {
         </Stack>
 
         {/* Timeline */}
-        <Timeline />
+        <CareerTimeline />
       </Stack>
     </>
   );
