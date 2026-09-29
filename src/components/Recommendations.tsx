@@ -153,7 +153,7 @@ function Recommendations() {
                         : 'flex-start',
                     transform: `translateX(calc(-${activeSlide} * (100% / ${itemsPerPage} + 16px)))`,
                     transition: 'transform 400ms ease',
-                    width: 'max-content',
+                    width: 'fit-content',
                     minWidth: '100%',
                   }}
                 >
