@@ -308,11 +308,13 @@ function NotFoundPage() {
   return (
     <Stack
       sx={{
-        minHeight: '100vh',
+        maxHeight: '100vh',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         px: 2,
+        pb: 2,
+        overflowY: 'scroll',
       }}
     >
       <Stack
