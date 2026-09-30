@@ -4,6 +4,7 @@ import {
   Info as InfoIcon,
   ArrowBackIosNew as ArrowBackIosNewIcon,
   ArrowForwardIos as ArrowForwardIosIcon,
+  LinkedIn as LinkedInIcon,
 } from '@mui/icons-material';
 import {
   Box,
@@ -62,11 +63,7 @@ function Recommendations() {
   const activeSlide = Math.min(currentSlide, slideCount - 1);
 
   return (
-    <Box
-      component="section"
-      aria-labelledby="recommendations-heading"
-      sx={{ px: 2, pb: 6 }}
-    >
+    <Box aria-labelledby="recommendations-heading" sx={{ px: 2, pb: 6 }}>
       {isLoading ? (
         // Show only the skeleton while recommendations are loading.
         <RecommendationsSkeleton />
@@ -160,8 +157,6 @@ function Recommendations() {
                   {recommendationEntries.map(([name, recommendation]) => (
                     <Paper
                       key={name}
-                      component="button"
-                      type="button"
                       onClick={(event) => {
                         event.currentTarget.blur();
                         setSelectedRecommendation({ name, recommendation });
@@ -192,104 +187,60 @@ function Recommendations() {
                       }}
                     >
                       {/* Reviewer name and optional LinkedIn link */}
-                      <Tooltip
-                        title="See Contact"
-                        placement="top"
-                        arrow
-                        disableHoverListener={!recommendation.contactURL}
-                        disableFocusListener={!recommendation.contactURL}
-                        disableTouchListener={!recommendation.contactURL}
+                      {/* <Paper elevation={8} sx={{ padding: 1 }}> */}
+                      <Stack
+                        spacing={0.5}
+                        direction={'row'}
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
                       >
-                        <Typography
-                          component={recommendation.contactURL ? 'a' : 'h6'}
-                          href={recommendation.contactURL || undefined}
-                          target={
-                            recommendation.contactURL ? '_blank' : undefined
-                          }
-                          rel={
-                            recommendation.contactURL
-                              ? 'noopener noreferrer'
-                              : undefined
-                          }
-                          onClick={(event: MouseEvent<HTMLElement>) =>
-                            event.stopPropagation()
-                          }
-                          onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
-                            event.stopPropagation()
-                          }
-                          variant="h6"
-                          sx={{
-                            textAlign: 'center',
-                            display: 'block',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                            cursor: recommendation.contactURL
-                              ? 'pointer'
-                              : 'inherit',
-                            '&:visited': {
-                              color: 'inherit',
-                            },
-                            '&:hover, &:focus': {
-                              color: 'inherit',
-                              textDecoration: 'none',
-                            },
-                          }}
+                        <Tooltip
+                          title="See Recommender LinkedIn"
+                          placement="top"
+                          arrow
                         >
-                          {name}
-                        </Typography>
-                      </Tooltip>
+                          <span>
+                            <IconButton
+                              aria-label="See Recommender LinkedIn"
+                              onClick={(event: MouseEvent<HTMLElement>) => {
+                                event.stopPropagation();
+                                window.open(
+                                  recommendation.contactURL || '',
+                                  '_blank',
+                                  'noopener,noreferrer'
+                                );
+                              }}
+                              onKeyDown={(
+                                event: KeyboardEvent<HTMLElement>
+                              ) => {
+                                event.stopPropagation();
+                              }}
+                              sx={{
+                                '&:hover': {
+                                  color: 'secondary.main',
+                                },
+                              }}
+                            >
+                              <LinkedInIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                        <Typography variant="h6">{name}</Typography>
+                      </Stack>
 
                       {/* Company link and reviewer title */}
-                      <Tooltip
-                        title="See Company"
-                        placement="top"
-                        arrow
-                        disableHoverListener={!recommendation.CompanySocialsURL}
-                        disableFocusListener={!recommendation.CompanySocialsURL}
-                        disableTouchListener={!recommendation.CompanySocialsURL}
+
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          color: 'text.secondary',
+                        }}
                       >
-                        <Typography
-                          component={
-                            recommendation.CompanySocialsURL ? 'a' : 'p'
-                          }
-                          href={recommendation.CompanySocialsURL || undefined}
-                          target={
-                            recommendation.CompanySocialsURL
-                              ? '_blank'
-                              : undefined
-                          }
-                          rel={
-                            recommendation.CompanySocialsURL
-                              ? 'noopener noreferrer'
-                              : undefined
-                          }
-                          onClick={(event: MouseEvent<HTMLElement>) =>
-                            event.stopPropagation()
-                          }
-                          onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
-                            event.stopPropagation()
-                          }
-                          variant="subtitle1"
-                          sx={{
-                            textAlign: 'center',
-                            display: 'block',
-                            color: 'text.secondary',
-                            textDecoration: 'none',
-                            cursor: recommendation.CompanySocialsURL
-                              ? 'pointer'
-                              : 'inherit',
-                            '&:visited': {
-                              color: 'text.secondary',
-                            },
-                            '&:hover, &:focus': {
-                              color: 'text.secondary',
-                              textDecoration: 'none',
-                            },
-                          }}
-                        >
-                          {recommendation.company}
-                        </Typography>
-                      </Tooltip>
+                        {recommendation.company}
+                      </Typography>
                       <Typography
                         variant="subtitle2"
                         color="text.secondary"
@@ -297,20 +248,29 @@ function Recommendations() {
                       >
                         {recommendation.title}
                       </Typography>
+                      {/* </Paper> */}
 
-                      <Divider sx={{ my: 1 }} />
+                      <Divider sx={{ mt: 1, mb: 1 }} />
 
                       {/* Public recommendation quote */}
-                      <Typography
-                        variant="body1"
+                      <Box
                         sx={{
-                          textAlign: 'center',
-                          maxWidth: '100%',
-                          overflowY: 'auto',
+                          display: 'flex',
+                          alignItems: 'center',
+                          height: '100%',
                         }}
                       >
-                        {recommendation.quote}
-                      </Typography>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            textAlign: 'center',
+                            maxWidth: '100%',
+                            overflowY: 'auto',
+                          }}
+                        >
+                          {recommendation.quote}
+                        </Typography>
+                      </Box>
                     </Paper>
                   ))}
                 </Box>

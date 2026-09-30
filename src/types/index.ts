@@ -5,3 +5,4 @@ export type {
 } from './recommendations';
 export type { Profile } from './profile';
 export type { Career } from './career';
+export type { Project } from './project';

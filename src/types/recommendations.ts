@@ -8,6 +8,7 @@ export type Recommendation = {
 };
 
 export type RecommendationRow = {
+  id: number;
   name: string;
   title: string;
   company: string;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // Local Imports
-import type { Career } from '@types';
+import type { Career, Project } from '@types';
 import { TimelineCard } from '@components';
 // MUI Imports
 import {
@@ -8,7 +8,7 @@ import {
   Box,
   TextField,
   InputAdornment,
-  LinearProgress,
+  CircularProgress,
 } from '@mui/material';
 import { Search, Work } from '@mui/icons-material';
 import Timeline from '@mui/lab/Timeline';
@@ -17,11 +17,12 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineContent from '@mui/lab/TimelineContent';
-import { fetchCareers } from '@utils/services';
+import { fetchCareers, fetchProjects } from '@utils/services';
 import { ErrorFetching } from '@components';
 
 function CareerTimeline() {
   const [careers, setCareers] = useState<Career[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,6 +35,20 @@ function CareerTimeline() {
   }, []);
 
   // TODO: Fetch projects and combine with careers and organize the timeline
+
+  useEffect(() => {
+    // Fetch career data from the API and update the state.
+    fetchProjects()
+      .then((data) => setProjects(data))
+      .catch((fetchError: Error) => setError(fetchError.message))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  // useEffect(() => {
+  //   if (projects && careers) {
+  //     console.log('projects, careers:', projects, careers);
+  //   }
+  // }, [projects, careers]);
 
   if (error) {
     // Show a friendly fallback if the profile cannot be loaded.
@@ -78,8 +93,13 @@ function CareerTimeline() {
         <>
           {/* Loading Indicator */}
           {/* TODO: Add Skeleton Loading */}
-          <Box sx={{ width: '100%' }}>
-            <LinearProgress aria-label="Loading…" />
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <CircularProgress aria-label="Loading…" />
           </Box>
         </>
       ) : (
