@@ -1,6 +1,4 @@
-export type {
-  Recommendation,
-  RecommendationRow,
-  SelectedRecommendation,
-} from './recommendations';
-export type { Profile } from './profile';
+export * from './recommendations';
+export * from './profile';
+export * from './career';
+export * from './project';

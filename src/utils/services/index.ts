@@ -1,2 +1,4 @@
-export { fetchRecommendations } from './recommendations.ts';
-export { fetchProfile } from './profile.ts';
+export * from './recommendations.ts';
+export * from './profile.ts';
+export * from './careers.ts';
+export * from './projects.ts';

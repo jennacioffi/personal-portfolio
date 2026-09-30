@@ -5,7 +5,7 @@ export async function fetchRecommendations() {
   const { data, error } = await supabase
     .from('recommendations')
     .select(
-      'name, title, company, company_socials_url, contact_url, quote, original_data'
+      'id, name, title, company, company_socials_url, contact_url, quote, original_data'
     );
 
   if (error) {
@@ -16,6 +16,7 @@ export async function fetchRecommendations() {
     (data as RecommendationRow[]).map((row) => [
       row.name,
       {
+        id: row.id,
         title: row.title,
         company: row.company,
         CompanySocialsURL: row.company_socials_url,
