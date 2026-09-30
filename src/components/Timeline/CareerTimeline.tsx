@@ -7,6 +7,7 @@ import {
   TextField,
   InputAdornment,
   CircularProgress,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
@@ -24,6 +25,7 @@ import {
 import { fetchCareers, fetchProjects } from '@utils/services';
 
 const TIMELINE_MOBILE_BREAKPOINT = 'md';
+const SEARCH_DEBOUNCE_MS = 500;
 
 function CareerTimeline() {
   const theme = useTheme();
@@ -34,6 +36,9 @@ function CareerTimeline() {
 
   const [careers, setCareers] = useState<Career[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,8 +47,6 @@ function CareerTimeline() {
       .then(([careerData, projectData]) => {
         setCareers(careerData);
         setProjects(projectData);
-        console.log('Careers', careerData);
-        console.log('Projects', projectData);
       })
       .catch((fetchError: Error) => {
         setError(fetchError.message);
@@ -52,6 +55,18 @@ function CareerTimeline() {
         setIsLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsSearching(true);
+      setDebouncedSearch(search.trim().toLowerCase());
+      setIsSearching(false);
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
 
   const timelineData = useMemo<CareerTimeLine[]>(
     () =>
@@ -66,12 +81,54 @@ function CareerTimeline() {
             .filter((project) => project.career_id === career.id)
             .sort(
               (a, b) =>
-                new Date(b.start_date).getTime() -
-                new Date(a.start_date).getTime()
+                new Date(b.start_date ?? 0).getTime() -
+                new Date(a.start_date ?? 0).getTime()
             ),
         })),
     [careers, projects]
   );
+
+  const filteredTimelineData = useMemo(() => {
+    if (!debouncedSearch) {
+      return timelineData;
+    }
+
+    return timelineData.reduce<CareerTimeLine[]>((results, timeline) => {
+      const { career, projects } = timeline;
+
+      const careerMatches = [
+        career.company,
+        career.title,
+        career.description,
+        ...(Array.isArray(career.skills) ? career.skills : []),
+      ].some((value) =>
+        String(value ?? '')
+          .toLowerCase()
+          .includes(debouncedSearch)
+      );
+
+      const matchingProjects = projects.filter((project) =>
+        [
+          project.name,
+          project.description,
+          ...(Array.isArray(project.skills) ? project.skills : []),
+        ].some((value) =>
+          String(value ?? '')
+            .toLowerCase()
+            .includes(debouncedSearch)
+        )
+      );
+
+      if (careerMatches || matchingProjects.length > 0) {
+        results.push({
+          career,
+          projects: matchingProjects,
+        });
+      }
+
+      return results;
+    }, []);
+  }, [timelineData, debouncedSearch]);
 
   if (error) {
     return <ErrorFetching message="Unable to load careers timeline." />;
@@ -88,12 +145,15 @@ function CareerTimeline() {
       }}
     >
       <TextField
-        label="Search Timeline..."
-        placeholder="Search Timeline..."
+        label="Search by company, title, project, skill, or description"
         variant="outlined"
         fullWidth
         color="secondary"
         disabled={isLoading}
+        value={search}
+        onChange={(event) => {
+          setSearch(event.target.value);
+        }}
         sx={{
           width: {
             xs: '90%',
@@ -107,14 +167,28 @@ function CareerTimeline() {
                 <Search />
               </InputAdornment>
             ),
+            endAdornment: isSearching ? (
+              <InputAdornment position="end">
+                <CircularProgress
+                  size={20}
+                  sx={{
+                    color: 'secondary.main',
+                  }}
+                />
+              </InputAdornment>
+            ) : null,
           },
         }}
       />
 
       {isLoading ? (
         <CircularProgress aria-label="Loading…" />
+      ) : filteredTimelineData.length === 0 ? (
+        <Typography variant="h6" color="text.secondary" sx={{ mt: 2 }}>
+          No Results
+        </Typography>
       ) : isMobile ? (
-        <MobileCareerTimeline timelineData={timelineData} />
+        <MobileCareerTimeline timelineData={filteredTimelineData} />
       ) : (
         <Timeline
           position="alternate"
@@ -123,12 +197,12 @@ function CareerTimeline() {
             px: 0,
           }}
         >
-          {timelineData.map(({ career, projects }, index) => (
+          {filteredTimelineData.map(({ career, projects }, index) => (
             <CareerTimelineGroup
               key={career.id}
               career={career}
               projects={projects}
-              isLastCareer={index === timelineData.length - 1}
+              isLastCareer={index === filteredTimelineData.length - 1}
             />
           ))}
         </Timeline>
