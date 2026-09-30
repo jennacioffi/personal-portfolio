@@ -1,4 +1,4 @@
-import { Paper, Card, Typography, Divider, Stack } from '@mui/material';
+import { Paper, Card, Typography, Divider, Stack, Chip } from '@mui/material';
 
 import { Event } from '@mui/icons-material';
 
@@ -52,7 +52,9 @@ function TimelineCard({ type, data }: TimelineCardProps) {
 
   const dateRange = formatDateRange(data.start_date, data.end_date);
 
-  const subtitle = isCareer ? 'Career' : `Project`;
+  const skills = Array.isArray(data.skills) ? data.skills : [];
+
+  const subtitle = isCareer ? 'Career' : 'Project';
 
   return (
     <Paper
@@ -111,6 +113,30 @@ function TimelineCard({ type, data }: TimelineCardProps) {
             >
               {data.description}
             </Typography>
+          </>
+        )}
+
+        {/* Skills */}
+        {skills.length > 0 && (
+          <>
+            <Divider sx={{ my: 2 }} />
+
+            <Stack
+              direction="row"
+              spacing={1}
+              useFlexGap
+              sx={{
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                width: '100%',
+                maxHeight: 75,
+                overflowY: 'scroll',
+              }}
+            >
+              {skills.map((skill) => (
+                <Chip key={skill} label={skill} size="small" color="primary" />
+              ))}
+            </Stack>
           </>
         )}
 

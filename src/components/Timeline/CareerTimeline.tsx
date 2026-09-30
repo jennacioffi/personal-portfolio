@@ -42,6 +42,8 @@ function CareerTimeline() {
       .then(([careerData, projectData]) => {
         setCareers(careerData);
         setProjects(projectData);
+        console.log('Careers', careerData);
+        console.log('Projects', projectData);
       })
       .catch((fetchError: Error) => {
         setError(fetchError.message);

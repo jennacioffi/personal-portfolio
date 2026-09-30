@@ -6,5 +6,5 @@ export type Project = {
   end_date: string;
   career_id: number;
   link: string;
-  skills: string[];
+  skills: string[] | null;
 };

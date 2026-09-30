@@ -8,7 +8,7 @@ export type Career = {
   end_date: string | null;
   description: string | null;
   link: string | null;
-  skills: string[];
+  skills: string[] | null;
 };
 
 export type CareerTimeLine = {
