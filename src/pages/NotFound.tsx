@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 import { Home, Replay } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const GAME_WIDTH = 700;
 const GAME_HEIGHT = 220;
@@ -638,7 +639,12 @@ function NotFoundPage() {
             Restart
           </Button>
 
-          <Button variant="contained" startIcon={<Home />} href="/">
+          <Button
+            variant="contained"
+            startIcon={<Home />}
+            component={Link}
+            to="/"
+          >
             Go Home
           </Button>
         </Stack>
