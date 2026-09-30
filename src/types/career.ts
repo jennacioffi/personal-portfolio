@@ -1,3 +1,5 @@
+import type { Project } from '@types';
+
 export type Career = {
   id: number;
   company: string;
@@ -7,4 +9,9 @@ export type Career = {
   description: string | null;
   link: string | null;
   skills: string[];
+};
+
+export type CareerTimeLine = {
+  career: Career;
+  projects: Project[];
 };

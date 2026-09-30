@@ -187,7 +187,6 @@ function Recommendations() {
                       }}
                     >
                       {/* Reviewer name and optional LinkedIn link */}
-                      {/* <Paper elevation={8} sx={{ padding: 1 }}> */}
                       <Stack
                         spacing={0.5}
                         direction={'row'}
@@ -256,8 +255,9 @@ function Recommendations() {
                       <Box
                         sx={{
                           display: 'flex',
-                          alignItems: 'center',
+                          // alignItems: 'center',
                           height: '100%',
+                          overflow: 'scroll',
                         }}
                       >
                         <Typography

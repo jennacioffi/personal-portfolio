@@ -1,21 +1,65 @@
-import { Stack, Paper, Card, Typography, Divider } from '@mui/material';
+import { Paper, Card, Typography, Divider, Stack } from '@mui/material';
+
 import { Event } from '@mui/icons-material';
-import type { Career } from '@types';
+
+import type { CareerTimeLine, Project } from '@types';
+
 import { primaryColorGlowSx } from '@utils';
 
-function TimelineCard({ career }: { career: Career }) {
-  const {
-    company,
-    title,
-    // start_date, end_date, description, link, skills
-  } = career;
+type TimelineCardProps =
+  | {
+      type: 'career';
+      data: CareerTimeLine['career'];
+    }
+  | {
+      type: 'project';
+      data: Project;
+    };
+
+function formatDate(date: string | null) {
+  if (!date) {
+    return '';
+  }
+
+  return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function formatDateRange(startDate: string | null, endDate: string | null) {
+  const formatStart = formatDate(startDate);
+  const formatEnd = formatDate(endDate);
+
+  if (!formatStart && !formatEnd) {
+    return null;
+  }
+
+  if (!formatStart) {
+    return formatEnd;
+  }
+
+  if (!formatEnd) {
+    return formatStart;
+  }
+
+  return `${formatStart} - ${formatEnd}`;
+}
+
+function TimelineCard({ type, data }: TimelineCardProps) {
+  const isCareer = type === 'career';
+
+  const dateRange = formatDateRange(data.start_date, data.end_date);
+
+  const subtitle = isCareer ? 'Career' : `Project`;
 
   return (
     <Paper
       elevation={10}
       sx={{
         display: 'flex',
-        maxWidth: 450,
+        maxWidth: isCareer ? 450 : 400,
         width: 'fit-content',
         borderRadius: 2,
         '&:hover': {
@@ -27,48 +71,69 @@ function TimelineCard({ career }: { career: Career }) {
         sx={{
           p: 2,
           borderRadius: 2,
+          width: '100%',
         }}
       >
-        {/* Company & Link */}
-        <>
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{
-              textAlign: 'center',
-            }}
-          >
-            {company}
-          </Typography>
-        </>
-
         {/* Title */}
         <Typography
-          variant="subtitle1"
-          gutterBottom
-          sx={{ textAlign: 'center' }}
-        >
-          {title}
-        </Typography>
-
-        <Divider sx={{ mb: 2 }} />
-
-        {/* Start - End Dates */}
-        <Stack
-          direction="row"
+          variant="h6"
           sx={{
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'center',
+            textAlign: 'center',
           }}
         >
-          {/* Icon */}
-          <Event />
+          {isCareer ? data.company : data.name}
+        </Typography>
 
-          {/* Start Date */}
+        {/* Career / Project label */}
+        <Typography
+          variant="subtitle1"
+          color="text.secondary"
+          gutterBottom
+          sx={{
+            textAlign: 'center',
+            color: 'text.secondary',
+          }}
+        >
+          {subtitle}
+        </Typography>
 
-          {/* End Date */}
-        </Stack>
+        {/* Description - Projects only */}
+        {!isCareer && (
+          <>
+            <Divider sx={{ mb: 1, mt: 1 }} />
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                textAlign: 'center',
+              }}
+            >
+              {data.description}
+            </Typography>
+          </>
+        )}
+
+        {/* Dates */}
+        {dateRange && (
+          <>
+            <Divider sx={{ my: 2 }} />
+
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Event />
+
+              <Typography variant="body2">{dateRange}</Typography>
+            </Stack>
+          </>
+        )}
       </Card>
     </Paper>
   );

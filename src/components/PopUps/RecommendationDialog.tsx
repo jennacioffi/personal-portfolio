@@ -1,3 +1,4 @@
+import { LinkedIn } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
@@ -39,7 +40,7 @@ function RecommendationDialog({
         },
       }}
     >
-      <DialogTitle sx={{ textAlign: 'center' }}>
+      <DialogTitle sx={{ textAlign: 'center', width: '95%' }}>
         {selectedRecommendation?.name}'s Recommendation
         <IconButton
           aria-label="Close original recommendation"
@@ -74,6 +75,7 @@ function RecommendationDialog({
           autoFocus
           variant="contained"
           onClick={handleViewLinkedIn}
+          startIcon={<LinkedIn />}
           sx={{
             width: 'fit-content',
           }}
