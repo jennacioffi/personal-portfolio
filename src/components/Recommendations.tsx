@@ -106,9 +106,7 @@ function Recommendations() {
                   textAlign: 'center',
                 }}
               >
-                Click on a card to view the full original recommendation. You
-                can also click on the reviewer or company name to visit their
-                LinkedIn profile.
+                Click on a card to view the full original recommendation.
               </Typography>
             </Stack>
           </>
