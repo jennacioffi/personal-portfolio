@@ -1,17 +1,27 @@
 import './App.css';
+
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Container } from '@mui/material';
 import { TopNav } from '@components';
-import { HomePage, PortfolioPage } from '@pages';
+import { HomePage, PortfolioPage, NotFoundPage } from '@pages';
 
 function App() {
   return (
     <HashRouter>
       <TopNav />
-      <Container maxWidth="xl" sx={{ textAlign: 'center', paddingTop: 4 }}>
+
+      <Container
+        maxWidth="xl"
+        sx={{
+          textAlign: 'center',
+          paddingTop: 4,
+        }}
+      >
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
+
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Container>
     </HashRouter>
