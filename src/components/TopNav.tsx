@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function TopNav() {
   return (
-    <AppBar position="static" color="primary" enableColorOnDark>
+    <AppBar position="sticky" color="primary" enableColorOnDark>
       <Toolbar sx={{ display: 'flex', justifyContent: 'center' }}>
         <Stack
           direction="row"
