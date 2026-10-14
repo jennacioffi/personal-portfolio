@@ -7,6 +7,11 @@ import path from 'path';
 export default defineConfig({
   base: '/personal-portfolio/',
   plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
+  server: {
+    watch: {
+      usePolling: true,
+    },
+  },
   resolve: {
     alias: {
       '@components': path.resolve(import.meta.dirname, './src/components'),
