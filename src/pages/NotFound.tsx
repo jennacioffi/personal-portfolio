@@ -315,7 +315,7 @@ function NotFoundPage() {
         justifyContent: 'center',
         px: 2,
         pb: 2,
-        overflowY: 'scroll',
+        overflowY: 'auto',
       }}
     >
       <Stack

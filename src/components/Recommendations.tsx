@@ -253,9 +253,9 @@ function Recommendations() {
                       <Box
                         sx={{
                           display: 'flex',
-                          // alignItems: 'center',
                           height: '100%',
-                          overflow: 'scroll',
+                          overflowY: 'auto',
+                          overflowX: 'hidden',
                         }}
                       >
                         <Typography
@@ -263,7 +263,6 @@ function Recommendations() {
                           sx={{
                             textAlign: 'center',
                             maxWidth: '100%',
-                            overflowY: 'auto',
                           }}
                         >
                           {recommendation.quote}

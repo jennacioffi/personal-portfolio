@@ -130,7 +130,7 @@ function TimelineCard({ type, data }: TimelineCardProps) {
                 flexWrap: 'wrap',
                 width: '100%',
                 maxHeight: 75,
-                overflowY: 'scroll',
+                overflowY: 'auto',
               }}
             >
               {skills.map((skill) => (
