@@ -1,15 +1,23 @@
 import type { Profile } from '@types';
-import { supabase } from './supabase.ts';
+import profileData from '../../data/profile.json';
+import { parseJson } from './parseJson.ts';
 
-export async function fetchProfile() {
-  const { data, error } = await supabase
-    .from('profile')
-    .select('bio, name, profile_image, socials, title')
-    .single();
-
-  if (error) {
-    throw error;
+function isSocials(value: unknown): value is Profile['socials'] {
+  if (typeof value !== 'object' || value === null) {
+    return false;
   }
 
-  return data as Profile;
+  const socials = value as Record<string, unknown>;
+
+  return (
+    typeof socials.github === 'string' && typeof socials.linkedin === 'string'
+  );
+}
+
+export async function fetchProfile(): Promise<Profile> {
+  return {
+    ...profileData[0],
+    profile_image: `${import.meta.env.BASE_URL}${profileData[0].profile_image.replace(/^\/+/, '')}`,
+    socials: parseJson(profileData[0].socials, 'profile.socials', isSocials),
+  };
 }

@@ -1,14 +1,20 @@
 import type { Career } from '@types';
-import { supabase } from './supabase.ts';
+import careerData from '../../data/careers.json';
+import { parseJson } from './parseJson.ts';
 
-export async function fetchCareers() {
-  const { data, error } = await supabase
-    .from('careers')
-    .select('id,company,title,start_date,end_date,description,link,skills');
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === 'string')
+  );
+}
 
-  if (error) {
-    throw error;
-  }
-
-  return data as Career[];
+export async function fetchCareers(): Promise<Career[]> {
+  return careerData.map((career) => ({
+    ...career,
+    skills: parseJson(
+      career.skills,
+      `careers[${career.id}].skills`,
+      isStringArray
+    ),
+  }));
 }

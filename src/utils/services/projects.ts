@@ -1,16 +1,20 @@
 import type { Project } from '@types';
-import { supabase } from './supabase.ts';
+import projectData from '../../data/projects.json';
+import { parseJson } from './parseJson.ts';
 
-export async function fetchProjects() {
-  const { data, error } = await supabase
-    .from('projects')
-    .select(
-      'id, name, description, start_date, end_date, career_id, link, skills'
-    );
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === 'string')
+  );
+}
 
-  if (error) {
-    throw error;
-  }
-
-  return data as Project[];
+export async function fetchProjects(): Promise<Project[]> {
+  return projectData.map((project) => ({
+    ...project,
+    skills: parseJson(
+      project.skills,
+      `projects[${project.id}].skills`,
+      isStringArray
+    ),
+  }));
 }
